@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install apache and PHP
+      dnf:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+      when: ansible_distribution == "fedora"
+    - name: update repo
+      dnf:
+        update_cache: yes
+      when: ansible_distribution == "fedora"
