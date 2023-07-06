@@ -1,5 +1,5 @@
-[inventory]
-127.0.0.1
-fedora@192.168.1.84
+[fedora]
+fedora@192.168.1.84  apa=apache2 php=libapache2-mod-php v=vim
+
+[ubuntu]
 192.168.1.72
-192.168.1.65
