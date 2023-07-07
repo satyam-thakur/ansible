@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install apache and PHP
+      apt:
+        name:
+          - 
+          - "{{php}}"
+        state: latest
+    - name: start httpd
+      tags: start service httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "fedora"
+
+    - name: change email address for admin
+      tags: apache,httpd, fedora
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: ;^ServerAdmin"
+        line: ServerAdmin Satyam.xyz@gmail.com
+        register: httpd
+
+    - name: restart httpd (fedora)
+      tags:apache (fedora)
+      service:
+        name: httpd
+        state: restarted
+      when: httpd.changed
+      
+    - name: update repo
+      dnf:
+        update_cache: yes
+      when: ansible_distribution == "fedora"
+    - name: copy default html file for site
+      tags: apache2
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 644
