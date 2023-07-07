@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  tasks:    
+    - name: update repo
+      dnf:
+        update_cache: yes
+      when: ansible_distribution == "fedora"
+    - name: copy default html file for site
+      tags: apache2
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 644
+
+- hosts: all
+  become: true
+  tasks:
+    - name: add user 
+      tags: always
+      user:
+        name: satya
+        groups: root  
+    - name: add ssh key for satya
+      tags: always
+      authorized_key:
+          user: satya
+          key: "....................."
+
+    - name: add sudoers fil for satya
+      copy:
+        src: sudoer_satya
+        dest: /etc/sudoers.d/satya
+        owner: root
+        group: root
