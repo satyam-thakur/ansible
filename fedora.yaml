@@ -15,6 +15,21 @@
         state: started
         enabled: yes
       when: ansible_distribution == "fedora"
+
+    - name: change email address for admin
+      tags: apache,httpd, fedora
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: ;^ServerAdmin"
+        line: ServerAdmin Satyam.xyz@gmail.com
+        register: httpd
+
+    - name: restart httpd (fedora)
+      tags:apache (fedora)
+      service:
+        name: httpd
+        state: restarted
+      when: httpd.changed
       
     - name: update repo
       dnf:
