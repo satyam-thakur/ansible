@@ -8,13 +8,7 @@
           - "{{apa}}"
           - "{{php}}"
         state: latest
-
-    - name: add user 
-      tags: always
-      user:
-        name: satya
-        groups: root
-        
+     
     - name: start httpd
       tags: start service httpd
       service:
@@ -50,3 +44,32 @@
         owner: root
         group: root
         mode: 644
+
+- hosts: all
+  become: true
+  tasks:
+    - name: add user 
+      tags: always
+      user:
+        name: satya
+        groups: root  
+
+    - name: add ssh key for satya
+      tags: always
+      authorized_key:
+          user: satya
+          key: "....................."
+
+    - name: add sudoers fil for satya
+      copy:
+        src: sudoer_satya
+        dest: /etc/sudoers.d/satya
+        owner: root
+        group: root
+
+        
+
+
+
+
+    
