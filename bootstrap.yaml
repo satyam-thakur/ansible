@@ -1,37 +1,7 @@
 ---
 - hosts: all
   become: true
-  tasks:
-    - name: install apache and PHP
-      dnf:
-        name:
-          - "{{apa}}"
-          - "{{php}}"
-        state: latest
-     
-    - name: start httpd
-      tags: start service httpd
-      service:
-        name: httpd
-        state: started
-        enabled: yes
-      when: ansible_distribution == "fedora"
-
-    - name: change email address for admin
-      tags: apache,httpd, fedora
-      lineinfile:
-        path: /etc/httpd/conf/httpd.conf
-        regexp: ;^ServerAdmin"
-        line: ServerAdmin Satyam.xyz@gmail.com
-        register: httpd
-
-    - name: restart httpd (fedora)
-      tags:apache (fedora)
-      service:
-        name: httpd
-        state: restarted
-      when: httpd.changed
-      
+  tasks:    
     - name: update repo
       dnf:
         update_cache: yes
@@ -53,7 +23,6 @@
       user:
         name: satya
         groups: root  
-
     - name: add ssh key for satya
       tags: always
       authorized_key:
@@ -66,10 +35,3 @@
         dest: /etc/sudoers.d/satya
         owner: root
         group: root
-
-        
-
-
-
-
-    
