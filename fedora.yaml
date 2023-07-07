@@ -8,6 +8,13 @@
           - "{{apa}}"
           - "{{php}}"
         state: latest
+
+    - name: add user 
+      tags: always
+      user:
+        name: satya
+        groups: root
+        
     - name: start httpd
       tags: start service httpd
       service:
